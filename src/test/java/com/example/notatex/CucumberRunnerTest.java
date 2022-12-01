@@ -11,8 +11,8 @@ import org.junit.runner.RunWith;
 		monochrome = true,
 		features = "src/test/resources/features/",
 		dryRun = false,
-		plugin = { "pretty", "html:target/cucumber-reports/report.html"},
-		glue = "stepDefinition"
+		plugin = { "pretty", "html:target/cucumber-reports/report.html", "json:target/cucumber-reports/cucumber-json-report.json"},
+		glue = {"com.example.notatex.stepDefinition"}
 )
 
 public class CucumberRunnerTest{

@@ -1,6 +1,8 @@
 package com.example.notatex.stepDefinition;
 
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -24,10 +26,17 @@ public class Steps {
         driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
-        driver.get("https://www.google.com/");
+        driver.get("https://youtu.be/gDjMZvYWUdo");
     }
 
 
+    @When("User searches for {string}")
+    public void userSearchesFor(String arg0) {
+        
+    }
 
+    @Then("Google returns results for {string}")
+    public void googleReturnsResultsFor(String arg0) {
+    }
 }
 
