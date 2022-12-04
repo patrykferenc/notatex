@@ -1,0 +1,11 @@
+services:
+  notatex-app:
+    build:
+      context: ./notatex-app
+      dockerfile: Dockerfile
+    ports:
+      - "5050:80"
+networks:
+  default:
+    driver: bridge
+    external: false
