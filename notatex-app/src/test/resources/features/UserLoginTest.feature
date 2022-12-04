@@ -1,7 +1,7 @@
 Feature: Test login functionality
 
   Background:
-    Given Application page is open
+    #Given Application page is open
 
   Scenario:
     When User fills login field

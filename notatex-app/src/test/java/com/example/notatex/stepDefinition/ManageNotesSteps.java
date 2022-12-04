@@ -92,5 +92,6 @@ public class ManageNotesSteps {
 
     @Then("Note is displayed in pure text format")
     public void noteIsDisplayedInPureTextFormat() {
+
     }
 }

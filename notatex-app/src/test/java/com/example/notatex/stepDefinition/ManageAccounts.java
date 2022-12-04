@@ -67,6 +67,7 @@ public class ManageAccounts {
 
     @Then("User can log in to created account")
     public void userCanLogInToCreatedAccount() {
+
     }
 }
 

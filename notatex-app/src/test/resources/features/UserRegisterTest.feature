@@ -1,7 +1,7 @@
 Feature: Test user register functionality
 
   Background:
-    Given Application page is open
+    #Given Application page is open
     And New account parameters are not occupied
 
   Scenario:
