@@ -39,4 +39,3 @@ public class Steps {
     public void googleReturnsResultsFor(String arg0) {
     }
 }
-
