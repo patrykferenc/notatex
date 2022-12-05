@@ -4,21 +4,16 @@ use std::io::{BufReader, Error, Read, Write};
 use std::path::Path;
 use std::process::Command;
 
-// Change it so it returns File instead of String
-pub fn create_and_compile(input: TexFile) -> Result<String, Error> {
-    // create local from pointer
-    
+pub fn create_and_compile(input: TexFile) -> Result<File, Error> {
     create_local_file_from_file_pointer(input.body(), String::from(input.name()))?;
-    // run tex compiler
+
     run_tex_compiler(String::from(input.name()))?;
-    // check if ready for request or no stack trace from logs
-    match was_compilation_succesfull(create_expected_output_path(input.filename_no_extension())) {
-        false => print!("option 1"),
-        true => print!("oprion 2"),
+
+    let output_pdf_path = create_expected_output_path(input.filename_no_extension());
+    match was_compilation_succesfull(&output_pdf_path) {
+        true => Ok(File::open(output_pdf_path)?),
+        false => Ok(File::open("input.txt")?),
     }
-    // check if pdf file exists if not then error
-    Ok(String::from(input.name()))
-    // return file pointer to be sent
 }
 
 fn create_local_file_from_file_pointer(
@@ -49,11 +44,11 @@ fn run_external_executable(exe: &String, arg: &str) -> Result<(), Error> {
 }
 fn create_expected_output_path(filename: String) -> String {
     let mut file_to_be_created_path: String = "/tmp/".to_owned();
-    file_to_be_created_path.push_str(&filename.as_str()); 
+    file_to_be_created_path.push_str(&filename.as_str());
     file_to_be_created_path.push_str(".pdf");
     return file_to_be_created_path;
 }
 
-fn was_compilation_succesfull(output_pdf_path: String) -> bool {
-    return Path::new(&output_pdf_path).exists();
+fn was_compilation_succesfull(output_pdf_path: &String) -> bool {
+    return Path::new(output_pdf_path).exists();
 }
