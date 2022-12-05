@@ -1,7 +1,7 @@
 Feature: Test deletion of user account functionality
 
   Background:
-    Given Application page is open
+    #Given Application page is open
     And User is logged in
 
   Scenario:
