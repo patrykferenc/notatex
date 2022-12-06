@@ -1,7 +1,7 @@
 # Compilation app contract
 ## Sending file to be compiled
 Endpoint:
-``
+```
 <resolvable hostname>/compile-tex
 ```
 Request, with .tex file :
