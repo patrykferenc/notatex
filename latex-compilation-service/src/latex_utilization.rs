@@ -52,3 +52,44 @@ fn create_expected_output_path(filename: String) -> String {
 fn was_compilation_succesfull(output_pdf_path: &String) -> bool {
     return Path::new(output_pdf_path).exists();
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn given_existing_directory_asert_returns_true() {
+        let result = was_compilation_succesfull(&"test_resources/test_file.tex".to_string());
+        assert_eq!(true, result);
+    }
+    #[test]
+    fn given_not_existing_directory_asert_returns_false() {
+        let result =
+            was_compilation_succesfull(&"test_resources/invalid_test_file.tex".to_string());
+        assert_eq!(false, result);
+    }
+    #[test]
+    fn given_valid_filepath_assert_no_error() {
+        let filename = "file".to_string();
+        let result = create_expected_output_path(filename);
+        assert_eq!("/tmp/file.pdf".to_string(), result);
+    }
+    #[test]
+    fn given_valid_exec_assert_no_error() {
+        let exec_name = "/bin/sh".to_string();
+        let _result = run_external_executable(&exec_name, &"");
+    }
+    #[test]
+    fn given_invalid_exec_panic() {
+        let exec_name = "/bin/nosuchexeexists".to_string();
+        let expected = Err(std::io::ErrorKind::NotFound);
+        let result = run_external_executable(&exec_name, &"").map_err(|e| e.kind());
+        assert_eq!(expected,result);
+    }
+    #[test]
+    fn given_correct_data_create_local_files_without_errors()
+    {
+        let test_file_pointer = File::open("test_resources/test_file.tex").unwrap();
+        let _result = create_local_file_from_file_pointer(&test_file_pointer, String::from("output.tex")).unwrap();
+        assert_eq!(Path::new("/tmp/output.tex").exists(),true);
+    }
+}
