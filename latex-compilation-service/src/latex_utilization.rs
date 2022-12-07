@@ -9,10 +9,12 @@ pub fn create_and_compile(input: TexFile) -> Result<File, Error> {
 
     run_tex_compiler(String::from(input.name()))?;
 
-    let output_pdf_path = create_expected_output_path(input.filename_no_extension());
-    match was_compilation_succesfull(&output_pdf_path) {
-        true => Ok(File::open(output_pdf_path)?),
-        false => Ok(File::open("input.txt")?),
+
+    //tu sie jebie
+    //let output_pdf_path = create_expected_output_path(input.filename_no_extension());
+    match was_compilation_succesfull(&"output.pdf".to_string()) {
+        true => Ok(File::open("output.pdf")?),
+        false => Ok(File::open("texput.log")?),
     }
 }
 
@@ -20,11 +22,8 @@ fn create_local_file_from_file_pointer(
     file_pointer: &File,
     local_filename: String,
 ) -> Result<(), Error> {
-    let mut file_to_be_created_path: String = "/tmp/".to_owned();
 
-    file_to_be_created_path.push_str(local_filename.as_str());
-
-    let mut file_to_be_saved = File::create(file_to_be_created_path)?;
+    let mut file_to_be_saved = File::create(local_filename)?;
     let mut input_file_reader = BufReader::new(file_pointer);
     let mut input_file_contents = String::new();
 
