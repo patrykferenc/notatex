@@ -1,4 +1,4 @@
-package com.example.notatex.e2e.stepDefinition;
+package com.krabelard.notatex.e2e.stepDefinition;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

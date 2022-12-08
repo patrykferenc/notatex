@@ -1,6 +1,6 @@
-package com.example.notatex.e2e.stepDefinition;
+package com.krabelard.notatex.e2e.stepDefinition;
 
-import com.example.notatex.e2e.website.NotatexPage;
+import com.krabelard.notatex.e2e.website.NotatexPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

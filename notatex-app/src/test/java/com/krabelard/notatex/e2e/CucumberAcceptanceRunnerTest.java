@@ -1,4 +1,4 @@
-package com.example.notatex.e2e;
+package com.krabelard.notatex.e2e;
 
 
 import io.cucumber.junit.Cucumber;
