@@ -6,16 +6,24 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class ManageNotesSteps {
 
     WebDriver driver;
+
+    int noteCount;
 
     private NotatexPage notatexPage() {
         return new NotatexPage(driver.findElement(By.tagName("body")));
@@ -30,14 +38,14 @@ public class ManageNotesSteps {
         driver = new ChromeDriver(chromeOptions);
 
         driver.manage().window().maximize();
-        driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(Duration.of(20, SECONDS));
+        driver.manage().timeouts().implicitlyWait(Duration.of(5, SECONDS));
 
-        driver.get("https://google.com/");
+        driver.get("http://localhost:3000/");
     }
 
 
-    @When("User clicks {string} button")
+    @When("User clicks {string}")
     public void userClicksButton(String buttonId) {
         notatexPage().button(buttonId).click();
     }
@@ -49,49 +57,25 @@ public class ManageNotesSteps {
 
     @And("User is logged in")
     public void userIsLoggedIn() {
-        ManageAccounts manageAccounts = new ManageAccounts(driver);
-        manageAccounts.userFillsLoginField();
-        manageAccounts.userFillsPasswordField();
-        notatexPage().button("log in").click();
-    }
-
-    @And("User has at least one note in note list")
-    public void userHasAtLeastOneNoteInNoteList() {
 
     }
 
-    @And("User selects note to add")
-    public void userSelectsNoteToAdd() {
-
+    @And("User fills {string} with {string}")
+    public void userFillsWith(String fieldname, String content) {
+        notatexPage().textField(fieldname).sendKeys(content);
     }
 
-    @Then("Note is in note list")
+    @And("Note count is known")
+    public void noteCountIsKnown() {
+        List<WebElement> notes = driver.findElements(By.className("col"));
+        noteCount = notes.size();
+    }
+
+    @And("Note is in note list")
     public void noteIsInNoteList() {
-
-    }
-
-    @Then("Note is not in note list")
-    public void noteIsNotInNoteList() {
-
-    }
-
-    @Then("Note is displayed in .tex format")
-    public void noteIsDisplayedInTexFormat() {
-
-    }
-
-    @Then("Edited note contains added text")
-    public void editedNoteContainsAddedText() {
-
-    }
-
-    @When("User selects note from note list")
-    public void userSelectsNoteFromNoteList() {
-
-    }
-
-    @Then("Note is displayed in pure text format")
-    public void noteIsDisplayedInPureTextFormat() {
-
+        List<WebElement> notes = driver.findElements(By.className("col"));
+        int noteCountAfter = notes.size();
+        int difference = noteCountAfter - noteCount;
+        Assertions.assertEquals(1, difference);
     }
 }
