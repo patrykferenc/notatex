@@ -1,7 +1,7 @@
 import { FormEvent, useRef } from "react";
 import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { NoteData } from "./App";
+import { NoteData } from "../App";
 
 type NoteFormProps = {
   onSubmit: (note: NoteData) => void;

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Button, Card, Col, Form, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Note } from "./App";
+import { Note } from "../App";
 import styles from "./NoteList.module.css";
 
 type SimpleNote = {
