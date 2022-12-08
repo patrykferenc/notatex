@@ -26,8 +26,6 @@ public class NoteCrudController {
     @Autowired
     NoteRepository repository;
 
-    // TODO - api docs under "/api" endpoint
-
     /**
      * Adds a new note to the database
      * @param noteFile file to be uploaded
