@@ -1,21 +1,32 @@
-mod latex_utilization;
+#[macro_use]
+extern crate rocket;
 #[allow(non_snake_case)]
 #[allow(dead_code)]
+mod latex_utilization;
 mod model;
+use rocket::data::{Data, ToByteUnit};
 use std::fs::File;
-use std::io::{BufReader, Read, Result};
-fn main() -> Result<()> {
-    let tex_file = File::open("input.txt")?;
-    let input_file = model::TexFile::new("output.tex".to_string(), tex_file);
+use std::io::Error;
+fn handle_post_req() -> Result<File, Error> {
+    let tex_file = File::open("/tmp/requested.tex")?;
+    let input_file = model::TexFile::new("/tmp/output.tex".to_string(), tex_file);
 
-    let result = latex_utilization::create_and_compile(input_file)?;
+    let resulting_pdf_or_error = latex_utilization::create_and_compile(input_file)?;
 
-    let mut input_file_reader = BufReader::new(result);
-    let mut input_file_contents = String::new();
+    Ok(resulting_pdf_or_error)
+}
+#[post("/compile-tex", data = "<paste>")]
+async fn upload(paste: Data<'_>) -> Result<File, Error> {
+    latex_utilization::run_cleanup_routine()?;
+    paste
+        .open(1.terabytes())
+        .into_file("/tmp/requested.tex")
+        .await?;
+    let result = handle_post_req().unwrap();
+    Ok(result)
+}
 
-    input_file_reader.read_to_string(&mut input_file_contents)?;
-    
-    println!("{}", input_file_contents);
-
-    Ok(())
+#[launch]
+fn rocket() -> _ {
+    rocket::build().mount("/", routes![upload])
 }

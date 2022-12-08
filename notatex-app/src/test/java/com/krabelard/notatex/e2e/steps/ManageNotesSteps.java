@@ -1,6 +1,6 @@
-package com.example.notatex.stepDefinition;
+package com.krabelard.notatex.e2e.steps;
 
-import com.example.notatex.website.NotatexPage;
+import com.krabelard.notatex.e2e.website.NotatexPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -17,12 +17,12 @@ public class ManageNotesSteps {
 
     WebDriver driver;
 
-    private NotatexPage notatexPage(){
+    private NotatexPage notatexPage() {
         return new NotatexPage(driver.findElement(By.tagName("body")));
     }
 
     @Given("Application page is open")
-    public void AppPageIsOpen(){
+    public void AppPageIsOpen() {
         ChromeOptions chromeOptions = new ChromeOptions();
 
         WebDriverManager.chromedriver().setup();
@@ -57,37 +57,37 @@ public class ManageNotesSteps {
 
     @And("User has at least one note in note list")
     public void userHasAtLeastOneNoteInNoteList() {
-        
+
     }
 
     @And("User selects note to add")
     public void userSelectsNoteToAdd() {
-        
+
     }
 
     @Then("Note is in note list")
     public void noteIsInNoteList() {
-        
+
     }
 
     @Then("Note is not in note list")
     public void noteIsNotInNoteList() {
-        
+
     }
 
     @Then("Note is displayed in .tex format")
     public void noteIsDisplayedInTexFormat() {
-        
+
     }
 
     @Then("Edited note contains added text")
     public void editedNoteContainsAddedText() {
-        
+
     }
 
     @When("User selects note from note list")
     public void userSelectsNoteFromNoteList() {
-        
+
     }
 
     @Then("Note is displayed in pure text format")

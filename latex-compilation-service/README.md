@@ -4,19 +4,9 @@ Endpoint:
 ```
 <resolvable hostname>/compile-tex
 ```
-Request, with .tex file :
+Request can be summarized with these curls:
+```terminal
+(test_resources) $ curl -d "@test_file_valid.tex" -X POST http://localhost:8000/compile-tex -H "Content-Type:
+application/x-tex" >> please.pdf
 ```
-POST: Content-Type: application/octet-stream
-BODY:
-{
-  name: "name.tex"
-}
-```
-Returns on success:
-```
-200, <filename>.pdf
-```
-Returns on failure:
-```
-400, spadaj dziadu
-```
+Response is a binary dump which, even if the texfile sent is not correct, will send a dump that when saves as pdf will be openable and readable.
