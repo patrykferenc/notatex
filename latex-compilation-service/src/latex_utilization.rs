@@ -11,7 +11,7 @@ pub fn create_and_compile(input: TexFile) -> Result<File, Error> {
 
     match was_compilation_succesfull(&"output.pdf".to_string()) {
         true => Ok(File::open("output.pdf")?),
-        false => Ok(File::open("output.log")?),
+        false => Ok(File::open("resources/error.pdf")?),
     }
 }
 
