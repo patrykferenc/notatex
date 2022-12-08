@@ -1,10 +1,17 @@
 services:
+  notatex-db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=notatex
+      - POSTGRES_PASSWORD=notatex
   notatex-app:
+    depends_on:
+      - notatex-db
     build:
       context: ./notatex-app
       dockerfile: Dockerfile
     ports:
-      - "5050:80"
+      - "5050:8080"
 networks:
   default:
     driver: bridge
