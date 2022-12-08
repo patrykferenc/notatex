@@ -33,24 +33,26 @@ export function NoteForm({
         <Row>
           <Col>
             <Form.Group controlId="title">
-              <Form.Label data-e2e="title field">Title</Form.Label>
+              <Form.Label>Title</Form.Label>
               <Form.Control
                 required
                 ref={titleRef}
                 defaultValue={title}
                 placeholder="Enter title"
+                data-e2e="title field"
               />
             </Form.Group>
           </Col>
         </Row>
         <Form.Group controlId="markdown">
-          <Form.Label data-e2e="body field">Body</Form.Label>
+          <Form.Label>Body</Form.Label>
           <Form.Control
             required
             as="textarea"
             ref={markdownRef}
             defaultValue={markdown}
             rows={15}
+            data-e2e="body field"
           />
         </Form.Group>
         <Stack direction="horizontal" gap={2} className="justify-content-end">
