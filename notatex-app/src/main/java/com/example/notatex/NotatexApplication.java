@@ -9,5 +9,4 @@ public class NotatexApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NotatexApplication.class, args);
 	}
-
 }

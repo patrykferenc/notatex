@@ -33,7 +33,7 @@ export function NoteForm({
         <Row>
           <Col>
             <Form.Group controlId="title">
-              <Form.Label>Title</Form.Label>
+              <Form.Label data-e2e="title field">Title</Form.Label>
               <Form.Control
                 required
                 ref={titleRef}
@@ -44,7 +44,7 @@ export function NoteForm({
           </Col>
         </Row>
         <Form.Group controlId="markdown">
-          <Form.Label>Body</Form.Label>
+          <Form.Label data-e2e="body field">Body</Form.Label>
           <Form.Control
             required
             as="textarea"
@@ -54,11 +54,15 @@ export function NoteForm({
           />
         </Form.Group>
         <Stack direction="horizontal" gap={2} className="justify-content-end">
-          <Button type="submit" variant="primary">
+          <Button type="submit" variant="primary" data-e2e="save button">
             Save
           </Button>
           <Link to="..">
-            <Button type="button" variant="outline-secondary">
+            <Button
+              type="button"
+              data-e2e="cancel button"
+              variant="outline-secondary"
+            >
               Cancel
             </Button>
           </Link>
