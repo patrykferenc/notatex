@@ -7,6 +7,10 @@ import { Container } from "react-bootstrap";
 import { NewNote } from "./NewNote";
 import { useLocalStorage } from "./useLocalStorage";
 import { v4 as uuidV4 } from "uuid";
+import { NoteList } from "./NoteList";
+import { NoteLayout } from "./NoteLayout";
+import { Note } from "./Note";
+import { EditNote } from "./EditNote";
 
 export type Note = {
   id: string;
@@ -26,14 +30,32 @@ function App() {
     });
   }
 
+  function onUpdateNote(id: string, { ...data }: NoteData) {
+    setNotes((prevNotes) => {
+      return prevNotes.map(note => {
+        if (note.id === id) {
+          return { ...note, ...data };
+        }
+        return note;
+      });
+    });
+  }
+
+  function onDelete(id:string){
+    setNotes((prevNotes) => {
+      return prevNotes.filter(note => note.id !== id);
+    });
+
+  }
+
   return (
     <Container className="my-4">
       <Routes>
-        <Route path="/" element={<h1>Home</h1>} />
+        <Route path="/" element={<NoteList notes={notes} />} />
         <Route path="/new" element={<NewNote onSubmit={onCreateNote} />} />
-        <Route path="/:id">
-          <Route index element={<h1>Show</h1>} />
-          <Route path="edit" element={<h1>Edit</h1>} />
+        <Route path="/:id" element={<NoteLayout notes={notes} />}>
+          <Route index element={<Note onDelete={onDelete}/>} />
+          <Route path="edit" element={<EditNote onSubmit={onUpdateNote} />} />
         </Route>
         <Route path="*" element={<Navigate to="/"></Navigate>} />
       </Routes>
