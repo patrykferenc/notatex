@@ -1,6 +1,6 @@
-package com.example.notatex.stepDefinition;
+package com.krabelard.notatex.e2e.stepDefinition;
 
-import com.example.notatex.website.NotatexPage;
+import com.krabelard.notatex.e2e.website.NotatexPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -14,25 +14,25 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.util.concurrent.TimeUnit;
 
 public class ManageAccounts {
-    
+
     private WebDriver driver;
-    
-    public ManageAccounts(){
+
+    public ManageAccounts() {
         ChromeOptions chromeOptions = new ChromeOptions();
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver(chromeOptions);
     }
-    
-    public ManageAccounts(WebDriver driver){
+
+    public ManageAccounts(WebDriver driver) {
         this.driver = driver;
     }
-    
-    private NotatexPage notatexPage(){
+
+    private NotatexPage notatexPage() {
         return new NotatexPage(driver.findElement(By.tagName("body")));
     }
 
     @Given("Login page is open")
-    public void loginPageIsOpen(){
+    public void loginPageIsOpen() {
         driver.manage().window().maximize();
         driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -57,12 +57,12 @@ public class ManageAccounts {
 
     @Then("User cannot log in to the deleted account")
     public void userCannotLogInToTheDeletedAccount() {
-        
+
     }
 
     @Then("User is on home page")
     public void userIsOnHomePage() {
-        
+
     }
 
     @Then("User can log in to created account")

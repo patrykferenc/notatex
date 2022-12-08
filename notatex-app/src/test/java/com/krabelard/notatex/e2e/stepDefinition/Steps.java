@@ -1,10 +1,10 @@
-package com.example.notatex.stepDefinition;
+package com.krabelard.notatex.e2e.stepDefinition;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.*;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -15,7 +15,7 @@ public class Steps {
     WebDriver driver;
 
     @Given("Google page is open")
-    public void googlePageIsOpen(){
+    public void googlePageIsOpen() {
         ChromeOptions chromeOptions = new ChromeOptions();
 
         WebDriverManager.chromedriver().setup();
@@ -32,7 +32,7 @@ public class Steps {
 
     @When("User searches for {string}")
     public void userSearchesFor(String arg0) {
-        
+
     }
 
     @Then("Google returns results for {string}")
