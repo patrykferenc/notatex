@@ -1,4 +1,4 @@
-package com.krabelard.notatex.e2e.stepDefinition;
+package com.krabelard.notatex.e2e.steps;
 
 import com.krabelard.notatex.e2e.website.NotatexPage;
 import io.cucumber.java.en.And;

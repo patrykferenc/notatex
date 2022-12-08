@@ -1,4 +1,4 @@
-package com.krabelard.notatex.e2e.stepDefinition;
+package com.krabelard.notatex.e2e.steps;
 
 import com.krabelard.notatex.e2e.website.NotatexPage;
 import io.cucumber.java.en.And;
@@ -11,11 +11,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class ManageAccounts {
 
-    private WebDriver driver;
+    private final WebDriver driver;
 
     public ManageAccounts() {
         ChromeOptions chromeOptions = new ChromeOptions();
@@ -34,8 +36,8 @@ public class ManageAccounts {
     @Given("Login page is open")
     public void loginPageIsOpen() {
         driver.manage().window().maximize();
-        driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(Duration.of(20, SECONDS));
+        driver.manage().timeouts().implicitlyWait(Duration.of(5, SECONDS));
     }
 
 
