@@ -12,6 +12,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5050:8080"
+  latex-compiler:
+    build:
+      context: ./latex-compilation-service
+      dockerfile: Dockerfile
+    ports:
+      - "5050:8080"
 networks:
   default:
     driver: bridge
