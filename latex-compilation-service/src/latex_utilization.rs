@@ -1,5 +1,5 @@
 use crate::model::TexFile;
-use std::fs::File;
+use std::fs::{File,remove_file};
 use std::io::{BufReader, Error, Read, Write};
 use std::path::Path;
 use std::process::Command;
@@ -9,12 +9,9 @@ pub fn create_and_compile(input: TexFile) -> Result<File, Error> {
 
     run_tex_compiler(String::from(input.name()))?;
 
-
-    //tu sie jebie
-    //let output_pdf_path = create_expected_output_path(input.filename_no_extension());
     match was_compilation_succesfull(&"output.pdf".to_string()) {
         true => Ok(File::open("output.pdf")?),
-        false => Ok(File::open("texput.log")?),
+        false => Ok(File::open("output.log")?),
     }
 }
 
@@ -22,7 +19,6 @@ fn create_local_file_from_file_pointer(
     file_pointer: &File,
     local_filename: String,
 ) -> Result<(), Error> {
-
     let mut file_to_be_saved = File::create(local_filename)?;
     let mut input_file_reader = BufReader::new(file_pointer);
     let mut input_file_contents = String::new();
@@ -34,6 +30,13 @@ fn create_local_file_from_file_pointer(
 
 fn run_tex_compiler(output_filename: String) -> Result<(), Error> {
     run_external_executable(&"/usr/bin/pdflatex".to_string(), &output_filename)?;
+    Ok(())
+}
+pub fn run_cleanup_routine() -> Result<(), Error> {
+    let _ = remove_file("output.pdf");
+    let _ = remove_file("output.aux");
+    let _ = remove_file("output.log");
+
     Ok(())
 }
 
@@ -67,12 +70,6 @@ mod tests {
         assert_eq!(false, result);
     }
     #[test]
-    fn given_valid_filepath_assert_no_error() {
-        let filename = "file".to_string();
-        let result = create_expected_output_path(filename);
-        assert_eq!("/tmp/file.pdf".to_string(), result);
-    }
-    #[test]
     fn given_valid_exec_assert_no_error() {
         let exec_name = "/bin/sh".to_string();
         let _result = run_external_executable(&exec_name, &"");
@@ -82,13 +79,14 @@ mod tests {
         let exec_name = "/bin/nosuchexeexists".to_string();
         let expected = Err(std::io::ErrorKind::NotFound);
         let result = run_external_executable(&exec_name, &"").map_err(|e| e.kind());
-        assert_eq!(expected,result);
+        assert_eq!(expected, result);
     }
     #[test]
-    fn given_correct_data_create_local_files_without_errors()
-    {
+    fn given_correct_data_create_local_files_without_errors() {
         let test_file_pointer = File::open("test_resources/test_file.tex").unwrap();
-        let _result = create_local_file_from_file_pointer(&test_file_pointer, String::from("output.tex")).unwrap();
-        assert_eq!(Path::new("/tmp/output.tex").exists(),true);
+        let _result =
+            create_local_file_from_file_pointer(&test_file_pointer, String::from("output.tex"))
+                .unwrap();
+        assert_eq!(Path::new("/tmp/output.tex").exists(), true);
     }
 }

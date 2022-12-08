@@ -1,7 +1,7 @@
 use std::fs::File;
 pub struct TexFile {
-    name : String,
-    body : File,
+    name: String,
+    body: File,
 }
 impl TexFile {
     pub fn body(&self) -> &File {
@@ -11,12 +11,10 @@ impl TexFile {
         &self.name
     }
     pub fn new(name: String, body: File) -> Self {
-        return TexFile { name: name, body: body };
-    }
-    pub fn filename_no_extension(&self) -> String {
-        let end_of_filename = self.name.find(".tex").unwrap();
-        let a =  self.name.chars().take(end_of_filename).collect();
-        return a;
+        return TexFile {
+            name: name,
+            body: body,
+        };
     }
 }
 
@@ -30,16 +28,23 @@ mod tests {
         let test_file_pointer = File::open("test_resources/test_file.tex").unwrap();
         let mut input_file_reader = BufReader::new(test_file_pointer);
         let mut input_file_contents = String::new();
-        input_file_reader.read_to_string(&mut input_file_contents).unwrap();
+        input_file_reader
+            .read_to_string(&mut input_file_contents)
+            .unwrap();
 
         //when
-        let texfile : TexFile = TexFile::new("normal_name.tex".to_string(), File::open("test_resources/test_file.tex").unwrap());
-        let mut texfile_reader =  BufReader::new(texfile.body());
+        let texfile: TexFile = TexFile::new(
+            "normal_name.tex".to_string(),
+            File::open("test_resources/test_file.tex").unwrap(),
+        );
+        let mut texfile_reader = BufReader::new(texfile.body());
         let mut pointer_contents = String::new();
-        texfile_reader.read_to_string(&mut pointer_contents).unwrap();
+        texfile_reader
+            .read_to_string(&mut pointer_contents)
+            .unwrap();
 
         //then
-        assert_eq!(texfile.name(),&"normal_name.tex".to_string());
-        assert_eq!(pointer_contents,input_file_contents);
+        assert_eq!(texfile.name(), &"normal_name.tex".to_string());
+        assert_eq!(pointer_contents, input_file_contents);
     }
 }
