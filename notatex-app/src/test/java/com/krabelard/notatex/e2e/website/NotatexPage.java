@@ -1,4 +1,4 @@
-package com.example.notatex.e2e.website;
+package com.krabelard.notatex.e2e.website;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
