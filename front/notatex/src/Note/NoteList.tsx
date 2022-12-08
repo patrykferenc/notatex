@@ -33,7 +33,9 @@ export function NoteList({ notes }: NoteListProps) {
         <Col xs="auto">
           <Stack gap={2} direction="horizontal">
             <Link to="/new">
-              <Button variant="primary">Create</Button>
+              <Button variant="primary" data-e2e="create button">
+                Create
+              </Button>
             </Link>
           </Stack>
         </Col>

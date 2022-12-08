@@ -19,7 +19,9 @@ export function Note({ onDelete }: NoteProps) {
         <Col xs="auto">
           <Stack gap={2} direction="horizontal">
             <Link to={`/${note.id}/edit`}>
-              <Button variant="primary">Edit</Button>
+              <Button variant="primary" data-e2e="edit button">
+                Edit
+              </Button>
             </Link>
             <Button
               onClick={() => {
@@ -27,11 +29,14 @@ export function Note({ onDelete }: NoteProps) {
                 navigate("/");
               }}
               variant="outline-danger"
+              data-e2e="delete button"
             >
               Delete
             </Button>
             <Link to="/">
-              <Button variant="outline-danger">Back</Button>
+              <Button variant="outline-danger" data-e2e="back button">
+                Back
+              </Button>
             </Link>
           </Stack>
         </Col>
