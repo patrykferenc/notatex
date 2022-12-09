@@ -1,12 +1,12 @@
 # Ta wersja się builduje, ale potem zwraca empty responsy
 # To-do: translate to english
-FROM rust AS build
+FROM --platform=linux/amd64 rust AS build
 
 RUN USER=root cargo new --bin latex-compiler-service
 WORKDIR /latex-compiler-service
 
 # Copy manifests
-COPY ./projectfiles/Cargo.lock ./Cargo.lock
+COPY ./Cargo.lock ./Cargo.lock
 COPY ./projectfiles/Cargo.toml ./Cargo.toml
 COPY ./projectfiles/Rocket.toml ./Rocket.toml
 
