@@ -1,5 +1,5 @@
-DOCKER_COMPOSE_COM=docker compose
-IMAGES=notatex-notatex-app
+DOCKER_COMPOSE_COM=docker-compose
+IMAGES=notatex-notatex-app notatex-latex-compiler
 start:
 	$(DOCKER_COMPOSE_COM) up
 stop:
