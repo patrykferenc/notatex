@@ -7,5 +7,5 @@ Feature: Render .tex note format in app
 
   Scenario:
     When User selects note
-    And User clicks "download button"
+    #And User clicks "download button"
     Then User receives .tex file in pdf format

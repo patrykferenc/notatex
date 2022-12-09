@@ -5,22 +5,18 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import static java.time.temporal.ChronoUnit.SECONDS;
-
-public class ManageNotesSteps {
-
+@SpringBootTest(classes = Config.class)
+public class ManageNotes {
+    @Autowired
     WebDriver driver;
 
     int noteCount;
@@ -29,37 +25,6 @@ public class ManageNotesSteps {
 
     private NotatexPage notatexPage() {
         return new NotatexPage(driver.findElement(By.tagName("body")));
-    }
-
-    @Given("Application page is open")
-    public void AppPageIsOpen() {
-        ChromeOptions chromeOptions = new ChromeOptions();
-
-        WebDriverManager.chromedriver().setup();
-
-        driver = new ChromeDriver(chromeOptions);
-
-        driver.manage().window().maximize();
-        driver.manage().timeouts().pageLoadTimeout(Duration.of(20, SECONDS));
-        driver.manage().timeouts().implicitlyWait(Duration.of(5, SECONDS));
-
-        driver.get("http://localhost:3000/");
-    }
-
-
-    @When("User clicks {string}")
-    public void userClicksButton(String buttonId) {
-        notatexPage().button(buttonId).click();
-    }
-
-    @And("User adds text to note")
-    public void userAddsTextToNote() {
-        notatexPage().textField("edit").sendKeys("");
-    }
-
-    @And("User is logged in")
-    public void userIsLoggedIn() {
-
     }
 
     @And("User fills {string} with {string}")
@@ -105,10 +70,7 @@ public class ManageNotesSteps {
         Thread.sleep(500);
     }
 
-    @When("User selects note")
-    public void userSelectsNote() {
-        driver.findElement(By.className("card-body")).click();
-    }
+
 
     @Then("Note is not in note list")
     public void noteIsNotInNoteList() {
@@ -141,5 +103,24 @@ public class ManageNotesSteps {
         Assertions.assertEquals(titleContent, notatexPage().textField("title field").getAttribute("value"));
         Assertions.assertEquals(bodyContent, notatexPage().textField("body field").getAttribute("value"));
 
+    }
+
+    @Then("User receives .tex file in pdf format")
+    public void userReceivesTexFileInPdfFormat() {
+    }
+
+    @Given("Application page is open")
+    public void AppPageIsOpen() {
+        driver.get("http://localhost:3000/");
+    }
+
+    @When("User clicks {string}")
+    public void userClicksButton(String buttonId) {
+        notatexPage().button(buttonId).click();
+    }
+
+    @When("User selects note")
+    public void userSelectsNote() {
+        driver.findElement(By.className("card-body")).click();
     }
 }

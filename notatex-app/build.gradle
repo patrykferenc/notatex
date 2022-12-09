@@ -23,10 +23,14 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
 
     // BDD
-    testImplementation('io.cucumber:cucumber-java:7.8.1')
-    testImplementation('io.cucumber:cucumber-junit-platform-engine:7.8.1')
+    testImplementation('io.cucumber:cucumber-java:6.10.4')
+    testImplementation('io.cucumber:cucumber-junit-platform-engine:6.10.4')
+    implementation('io.cucumber:cucumber-spring:6.10.4')
+    implementation('org.springframework.boot:spring-boot-starter-test')
+    implementation('org.springframework:spring-context-support:3.0.0.RELEASE')
     testImplementation('org.junit.platform:junit-platform-suite:1.9.0')
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.9.0')
+    implementation('io.qameta.allure:allure-cucumber6-jvm:2.17.2')
 
     // Selenium
     implementation 'org.seleniumhq.selenium:selenium-java:4.6.0'
