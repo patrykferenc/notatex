@@ -24,6 +24,8 @@ public class ManageNotesSteps {
     WebDriver driver;
 
     int noteCount;
+    String titleContent;
+    String bodyContent;
 
     private NotatexPage notatexPage() {
         return new NotatexPage(driver.findElement(By.tagName("body")));
@@ -67,15 +69,77 @@ public class ManageNotesSteps {
 
     @And("Note count is known")
     public void noteCountIsKnown() {
-        List<WebElement> notes = driver.findElements(By.className("col"));
+        List<WebElement> notes = driver.findElements(By.className("card-body"));
         noteCount = notes.size();
     }
 
     @And("Note is in note list")
     public void noteIsInNoteList() {
-        List<WebElement> notes = driver.findElements(By.className("col"));
+        List<WebElement> notes = driver.findElements(By.className("card-body"));
         int noteCountAfter = notes.size();
         int difference = noteCountAfter - noteCount;
         Assertions.assertEquals(1, difference);
+    }
+
+    @And("User has at least one note in note list")
+    public void userHasAtLeastOneNoteInNoteList() throws InterruptedException {
+        Thread.sleep(5000);
+        List<WebElement> notes = driver.findElements(By.className("card-body"));
+        noteCount = notes.size();
+        if(noteCount < 1){
+            addNote();
+            notes = driver.findElements(By.className("card-body"));
+            noteCount = notes.size();
+        }
+    }
+
+    public void addNote() throws InterruptedException {
+        Thread.sleep(500);
+        userClicksButton("create button");
+        Thread.sleep(500);
+        userFillsWith("title field", "tytul");
+        Thread.sleep(500);
+        userFillsWith("body field", "zawartosc");
+        Thread.sleep(500);
+        userClicksButton("save button");
+        Thread.sleep(500);
+    }
+
+    @When("User selects note")
+    public void userSelectsNote() {
+        driver.findElement(By.className("card-body")).click();
+    }
+
+    @Then("Note is not in note list")
+    public void noteIsNotInNoteList() {
+        List<WebElement> notes = driver.findElements(By.className("card-body"));
+        int actualNoteCount = notes.size();
+        Assertions.assertEquals(noteCount -1, actualNoteCount);
+    }
+
+    @And("User edits title")
+    public void userEditsTitle() {
+        String text = notatexPage().textField("title field").getAttribute("value");
+        notatexPage().textField("title field").clear();
+        titleContent = text + " po edycji";
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+text);
+        notatexPage().textField("title field").sendKeys(titleContent);
+    }
+
+    @And("User edits body")
+    public void userEditsBody() {
+        String text = notatexPage().textField("body field").getAttribute("value");
+        notatexPage().textField("body field").clear();
+        bodyContent = text + " po edycji";
+        notatexPage().textField("body field").sendKeys(bodyContent);
+    }
+
+    @Then("Edits are visible in note view")
+    public void editsAreVisibleInNoteView() {
+        userSelectsNote();
+        userClicksButton("edit button");
+        Assertions.assertEquals(titleContent, notatexPage().textField("title field").getAttribute("value"));
+        Assertions.assertEquals(bodyContent, notatexPage().textField("body field").getAttribute("value"));
+
     }
 }
