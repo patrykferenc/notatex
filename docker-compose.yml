@@ -18,6 +18,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "2137:8000"
+  notatex-front:
+    build:
+      context: ./front/notatex
+      dockerfile: Dockerfile
+    ports:
+      - "8080:3000"
 networks:
   default:
     driver: bridge
