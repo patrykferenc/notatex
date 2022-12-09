@@ -1,6 +1,6 @@
 # Ta wersja się builduje, ale potem zwraca empty responsy
 # To-do: translate to english
-FROM rust AS build
+FROM --platform=linux/amd64 rust AS build
 
 RUN USER=root cargo new --bin latex-compiler-service
 WORKDIR /latex-compiler-service
