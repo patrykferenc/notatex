@@ -17,7 +17,7 @@ services:
       context: ./latex-compilation-service
       dockerfile: Dockerfile
     ports:
-      - "5050:8080"
+      - "2137:8000"
 networks:
   default:
     driver: bridge

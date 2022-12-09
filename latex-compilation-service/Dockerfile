@@ -1,16 +1,23 @@
-FROM ubuntu:latest
-RUN apt-get update
-# Get Rust
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+# Ta wersja się builduje, ale potem zwraca empty responsy
+FROM rust AS build
 
-RUN echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
+RUN USER=root cargo new --bin latex-compiler-service
+WORKDIR /latex-compiler-service
 
-RUN apt-get install texlive-latex-base -y
-RUN mkdir -p /usr/src/myapp
-WORKDIR /usr/src/myapp
-COPY projectfiles .
+# Copy manifests
+COPY ./projectfiles/Cargo.lock ./Cargo.lock
+COPY ./projectfiles/Cargo.toml ./Cargo.toml
 
-RUN ~/.cargo/bin/cargo build --release
-COPY ./resources /usr/src/myapp/target/release
+RUN cargo build --release
+RUN rm ./src/*.rs
 
-CMD ["latex-compiler-service"]
+COPY ./projectfiles/src ./src
+
+RUN rm ./target/release/deps/latex_compiler_service*
+RUN cargo build --release
+
+FROM rust
+
+COPY --from=build /latex-compiler-service/target/release/latex-compiler-service .
+
+CMD [ "./latex-compiler-service" ]
