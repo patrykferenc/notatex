@@ -6,7 +6,7 @@ RUN USER=root cargo new --bin latex-compiler-service
 WORKDIR /latex-compiler-service
 
 # Copy manifests
-COPY ./projectfiles/Cargo.lock ./Cargo.lock
+COPY ./Cargo.lock ./Cargo.lock
 COPY ./projectfiles/Cargo.toml ./Cargo.toml
 COPY ./projectfiles/Rocket.toml ./Rocket.toml
 
