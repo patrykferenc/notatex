@@ -1,4 +1,11 @@
 # notatex
+# Setting up the stack
+In order to start up docker containers designed for your platform, if an image didn't run before, you should delete it and run :
+```terminal
+make setup
+```
+
+It'll generate a .env file suitable for your platform. Now you should be ok running the stack on your local machine.
 # Starting the stack
 ```terminal
 make start
