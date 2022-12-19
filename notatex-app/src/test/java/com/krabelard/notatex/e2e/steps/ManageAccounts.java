@@ -10,24 +10,18 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
+@SpringBootTest(classes = Config.class)
 public class ManageAccounts {
 
-    private final WebDriver driver;
-
-    public ManageAccounts() {
-        ChromeOptions chromeOptions = new ChromeOptions();
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver(chromeOptions);
-    }
-
-    public ManageAccounts(WebDriver driver) {
-        this.driver = driver;
-    }
+    @Autowired
+    WebDriver driver;
 
     private NotatexPage notatexPage() {
         return new NotatexPage(driver.findElement(By.tagName("body")));
@@ -35,9 +29,10 @@ public class ManageAccounts {
 
     @Given("Login page is open")
     public void loginPageIsOpen() {
-        driver.manage().window().maximize();
-        driver.manage().timeouts().pageLoadTimeout(Duration.of(20, SECONDS));
-        driver.manage().timeouts().implicitlyWait(Duration.of(5, SECONDS));
+    }
+
+    @And("User is logged in")
+    public void userIsLoggedIn() {
     }
 
 

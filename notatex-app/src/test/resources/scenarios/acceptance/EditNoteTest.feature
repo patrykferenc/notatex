@@ -1,16 +1,16 @@
 Feature: Test note editing functionality
 
   Background:
-    #Given Application page is open
+    Given Application page is open
     And User is logged in
     And User has at least one note in note list
 
   Scenario:
-    When User clicks "edit note" button
-    Then Note is displayed in .tex format
+    When User selects note
+    And User clicks "edit button"
+    And User edits title
+    And User edits body
+    And User clicks "save button"
+    And User clicks "back button"
+    Then Edits are visible in note view
 
-  Scenario:
-    When User clicks "edit note" button
-    And User adds text to note
-    And User clicks "save" button
-    Then Edited note contains added text
