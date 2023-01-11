@@ -1,4 +1,4 @@
-package com.krabelard.notatex.note.adapters.latex;
+package com.krabelard.notatex.note.service;
 
 import com.krabelard.notatex.note.exception.exceptions.NoteIOException;
 import com.krabelard.notatex.note.repository.NoteRepository;

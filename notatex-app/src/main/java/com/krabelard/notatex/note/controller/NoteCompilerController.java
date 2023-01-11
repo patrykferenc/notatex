@@ -1,6 +1,6 @@
 package com.krabelard.notatex.note.controller;
 
-import com.krabelard.notatex.note.adapters.latex.ExternalLatexCompilerApiService;
+import com.krabelard.notatex.note.service.ExternalLatexCompilerApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
