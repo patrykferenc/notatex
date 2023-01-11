@@ -7,6 +7,7 @@ import com.krabelard.notatex.note.exception.exceptions.NoteConflictException;
 import com.krabelard.notatex.note.exception.exceptions.NoteIOException;
 import com.krabelard.notatex.note.exception.exceptions.NoteNotFoundException;
 import com.krabelard.notatex.note.repository.NoteRepository;
+import jakarta.transaction.Transactional;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -26,7 +27,7 @@ public class NoteCrudService {
     private final NoteMapper mapper = NoteMapper.INSTANCE;
 
     public UUID create(MultipartFile noteFile) {
-        val checkNote = repository.findByName(noteFile.getName());
+        val checkNote = repository.findByName(noteFile.getOriginalFilename());
         if (checkNote.isPresent()) {
             throw new NoteConflictException(noteFile.getOriginalFilename());
         }
@@ -46,10 +47,10 @@ public class NoteCrudService {
         return repository.save(note).getUuid();
     }
 
-    public List<String> fetchNameList() {
+    public List<NoteDTO> fetchNoteList() {
         return repository.findAll()
                 .stream()
-                .map(Note::getName)
+                .map(mapper::entityToDto)
                 .toList();
     }
 

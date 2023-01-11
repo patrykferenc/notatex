@@ -41,8 +41,8 @@ public class NoteCrudController {
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<List<String>> fetchNoteList() {
-        return ResponseEntity.ok(crudService.fetchNameList());
+    public ResponseEntity<List<NoteDTO>> fetchNoteList() {
+        return ResponseEntity.ok(crudService.fetchNoteList());
     }
 
     @GetMapping(
