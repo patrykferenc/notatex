@@ -58,7 +58,10 @@ public class NoteCrudController {
         return ResponseEntity.ok(crudService.fetchNoteDownloadURL(noteUuid));
     }
 
-    @PutMapping("/{noteUuid}")
+    @PutMapping(
+            value = "/{noteUuid}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<NoteDTO> updateNote(@PathVariable UUID noteUuid, @RequestParam("note") MultipartFile noteFile) {
         return ResponseEntity.ok(crudService.update(noteUuid, noteFile));
     }
