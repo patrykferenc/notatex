@@ -4,12 +4,12 @@ import com.krabelard.notatex.note.domain.dto.NoteDTO;
 import com.krabelard.notatex.note.service.NoteCrudService;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,8 +49,11 @@ public class NoteCrudController {
             value = "/{noteUuid}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<URL> serveNote(@PathVariable UUID noteUuid) {
-        return ResponseEntity.ok(crudService.fetchNoteDownloadURL(noteUuid));
+    public ResponseEntity<byte[]> serveNote(@PathVariable UUID noteUuid) {
+        val noteInfo = crudService.downloadNote(noteUuid);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s\"", noteInfo.getKey()))
+                .body(noteInfo.getValue());
     }
 
     @PutMapping(

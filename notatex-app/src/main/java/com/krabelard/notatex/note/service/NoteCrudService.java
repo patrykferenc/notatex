@@ -7,16 +7,16 @@ import com.krabelard.notatex.note.exception.exceptions.NoteConflictException;
 import com.krabelard.notatex.note.exception.exceptions.NoteIOException;
 import com.krabelard.notatex.note.exception.exceptions.NoteNotFoundException;
 import com.krabelard.notatex.note.repository.NoteRepository;
-import jakarta.transaction.Transactional;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URL;
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -27,9 +27,10 @@ public class NoteCrudService {
     private final NoteMapper mapper = NoteMapper.INSTANCE;
 
     public UUID create(MultipartFile noteFile) {
-        val checkNote = repository.findByName(noteFile.getOriginalFilename());
+        val fileName = StringUtils.cleanPath(Objects.requireNonNull(noteFile.getOriginalFilename()));
+        val checkNote = repository.findByName(fileName);
         if (checkNote.isPresent()) {
-            throw new NoteConflictException(noteFile.getOriginalFilename());
+            throw new NoteConflictException(fileName);
         }
 
         byte[] content;
@@ -54,16 +55,11 @@ public class NoteCrudService {
                 .toList();
     }
 
-    public URL fetchNoteDownloadURL(UUID noteUuid) {
-        val noteBytes = repository.findByUuid(noteUuid)
-                .orElseThrow(() -> new NoteNotFoundException(noteUuid))
-                .getContents();
+    public AbstractMap.SimpleEntry<String, byte[]> downloadNote(UUID noteUuid) {
+        val note = repository.findByUuid(noteUuid)
+                .orElseThrow(() -> new NoteNotFoundException(noteUuid));
 
-        try {
-            return new ByteArrayResource(noteBytes).getURL();
-        } catch (IOException e) {
-            throw new NoteIOException(noteUuid.toString());
-        }
+        return new AbstractMap.SimpleEntry<>(note.getName(), note.getContents());
     }
 
     public NoteDTO update(UUID noteUuid, MultipartFile noteFile) {
