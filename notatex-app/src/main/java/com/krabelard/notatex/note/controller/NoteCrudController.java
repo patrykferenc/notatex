@@ -1,8 +1,6 @@
 package com.krabelard.notatex.note.controller;
 
 import com.krabelard.notatex.note.domain.dto.NoteDTO;
-import com.krabelard.notatex.note.domain.mapper.NoteMapper;
-import com.krabelard.notatex.note.repository.NoteRepository;
 import com.krabelard.notatex.note.service.NoteCrudService;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +25,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 public class NoteCrudController {
 
     @Autowired
-    private NoteRepository repository;
-    @Autowired
     private NoteCrudService crudService;
-    private final NoteMapper mapper = NoteMapper.INSTANCE;
 
     @PostMapping(
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE

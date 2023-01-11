@@ -3,16 +3,15 @@ package com.krabelard.notatex.note.service;
 import com.krabelard.notatex.note.domain.dto.NoteDTO;
 import com.krabelard.notatex.note.domain.mapper.NoteMapper;
 import com.krabelard.notatex.note.domain.model.Note;
+import com.krabelard.notatex.note.exception.exceptions.NoteConflictException;
 import com.krabelard.notatex.note.exception.exceptions.NoteIOException;
 import com.krabelard.notatex.note.exception.exceptions.NoteNotFoundException;
 import com.krabelard.notatex.note.repository.NoteRepository;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,7 +28,7 @@ public class NoteCrudService {
     public UUID create(MultipartFile noteFile) {
         val checkNote = repository.findByName(noteFile.getName());
         if (checkNote.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
+            throw new NoteConflictException(noteFile.getOriginalFilename());
         }
 
         byte[] content;
@@ -56,7 +55,7 @@ public class NoteCrudService {
 
     public URL fetchNoteDownloadURL(UUID noteUuid) {
         val noteBytes = repository.findByUuid(noteUuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
+                .orElseThrow(() -> new NoteNotFoundException(noteUuid))
                 .getContents();
 
         try {
@@ -68,13 +67,13 @@ public class NoteCrudService {
 
     public NoteDTO update(UUID noteUuid, MultipartFile noteFile) {
         val note = repository.findByUuid(noteUuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new NoteNotFoundException(noteUuid));
 
         note.setName(noteFile.getName());
         try {
             note.setContents(noteFile.getBytes());
         } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new NoteIOException(noteUuid.toString());
         }
 
         return mapper.entityToDto(repository.save(note));
