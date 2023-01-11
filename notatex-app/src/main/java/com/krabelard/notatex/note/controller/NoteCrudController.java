@@ -7,17 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MimeType;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.activation.MimetypesFileTypeMap;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -118,29 +114,6 @@ public class NoteCrudController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         repository.delete(note);
-    }
-
-    /**
-     * Compiles note with given id to pdf
-     * @param noteId id of note to be compiled
-     * @throws ResponseStatusException
-     * <p> 404 not found - note with given id not found
-     * <p> 500 internal server error - java shit itself while reading the file and threw {@link IOException}
-     */
-    @PostMapping(value = "/api/compile/{noteId}")
-    public Resource compileNote(@PathVariable long noteId) {
-        val noteBytes = new ByteArrayResource(
-            repository.findById(noteId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
-                .getContents()
-        );
-        val compilerURL = "http://latex-compiler:8000/compile-tex";
-        val requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.asMediaType(MimeType.valueOf("application/x-tex")));
-        val restTemplate = new RestTemplate();
-        val requestEntity = new HttpEntity<>(noteBytes, requestHeaders);
-        val response = restTemplate.exchange(compilerURL, HttpMethod.POST, requestEntity, Resource.class);
-        return response.getBody();
     }
 
 }
