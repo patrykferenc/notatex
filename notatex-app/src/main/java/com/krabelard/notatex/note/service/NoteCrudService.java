@@ -42,7 +42,7 @@ public class NoteCrudService {
 
         val note = new Note();
         note.setUuid(UUID.randomUUID());
-        note.setName(noteFile.getOriginalFilename());
+        note.setName(fileName);
         note.setContents(content);
 
         return repository.save(note).getUuid();
@@ -66,7 +66,8 @@ public class NoteCrudService {
         val note = repository.findByUuid(noteUuid)
                 .orElseThrow(() -> new NoteNotFoundException(noteUuid));
 
-        note.setName(noteFile.getName());
+        val fileName = StringUtils.cleanPath(Objects.requireNonNull(noteFile.getOriginalFilename()));
+        note.setName(fileName);
         try {
             note.setContents(noteFile.getBytes());
         } catch (IOException e) {

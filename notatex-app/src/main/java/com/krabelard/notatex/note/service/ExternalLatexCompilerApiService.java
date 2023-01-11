@@ -9,11 +9,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.AbstractMap;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,12 +25,10 @@ public class ExternalLatexCompilerApiService {
     @Autowired
     private NoteRepository repository;
 
-    public URL compileNote(UUID noteUuid) {
-        val noteBytes = new ByteArrayResource(
-                repository.findByUuid(noteUuid)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
-                        .getContents()
-        );
+    public AbstractMap.SimpleEntry<String, byte[]> compileNote(UUID noteUuid) {
+        val note = repository.findByUuid(noteUuid)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        val noteBytes = new ByteArrayResource(note.getContents());
         val compilerURL = "http://latex-compiler:8000/compile-tex";
         val requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.asMediaType(MimeType.valueOf("application/x-tex")));
@@ -37,7 +37,8 @@ public class ExternalLatexCompilerApiService {
         val response = restTemplate.exchange(compilerURL, HttpMethod.POST, requestEntity, Resource.class);
 
         try {
-            return Objects.requireNonNull(response.getBody()).getURL();
+            val compiledBytes = Objects.requireNonNull(response.getBody()).getInputStream().readAllBytes();
+            return new AbstractMap.SimpleEntry<>(note.getName(), compiledBytes);
         } catch (IOException e) {
             throw new NoteIOException(noteUuid.toString());
         }
