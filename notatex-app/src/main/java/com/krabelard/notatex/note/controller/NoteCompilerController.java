@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,17 +18,17 @@ import java.io.IOException;
 
 @Controller
 @RequestMapping("/api/compile")
-public class NoteCompiler {
+public class NoteCompilerController {
 
     @Autowired
     private NoteRepository repository;
 
     /**
      * Compiles note with given id to pdf
+     *
      * @param noteId id of note to be compiled
-     * @throws ResponseStatusException
-     * <p> 404 not found - note with given id not found
-     * <p> 500 internal server error - java shit itself while reading the file and threw {@link IOException}
+     * @throws ResponseStatusException <p> 404 not found - note with given id not found
+     *                                 <p> 500 internal server error - java shit itself while reading the file and threw {@link IOException}
      */
     @GetMapping(value = "/{noteId}")
     public Resource compileNote(@PathVariable long noteId) {
