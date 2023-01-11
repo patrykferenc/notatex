@@ -1,14 +1,14 @@
 # notatex
-# Starting the stack
+## Starting the stack
 ```terminal
 make start
 ```
 This command starts the stack with full verbsoe mode, ie. all output will be visible in the terminal.
-# Stoping the stack
+## Stoping the stack
 ```terminal
 make stop
 ```
-# Deleting redundant docker images
+## Deleting redundant docker images
 ```terminal
 make clean
 ```
@@ -16,6 +16,13 @@ So in order to chain stop and delete you'll have to go:
 ```terminal
 make stop && make clean
 ```
+
+## API docs
+Api docs for endpoints exposed by the backend java part can be found at
+```
+localhost:5050/swagger-ui.html
+```
+
 ## Code diversity status
 ```
 -------------------------------------------------------------------------------
