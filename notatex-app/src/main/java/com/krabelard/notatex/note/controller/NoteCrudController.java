@@ -32,8 +32,7 @@ public class NoteCrudController {
 
     @Autowired
     private NoteRepository repository;
-    @Autowired
-    private NoteMapper mapper;
+    private final NoteMapper mapper = NoteMapper.INSTANCE;
 
     @PostMapping(
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
