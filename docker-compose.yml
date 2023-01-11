@@ -16,12 +16,16 @@ services:
     build:
       context: ./front/notatex
       dockerfile: Dockerfile
+      args:
+        - TARGET_PLATFORM=${TARGET_PLATFORM}
     ports:
       - "8080:3000"
   latex-compiler:
     build:
       context: ./latex-compilation-service
       dockerfile: Dockerfile
+      args: 
+        - RUST_IMG=${RUST_IMG}
     ports:
       - "8000:8000"
 networks:
