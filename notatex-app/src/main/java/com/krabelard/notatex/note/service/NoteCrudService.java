@@ -7,6 +7,7 @@ import com.krabelard.notatex.note.exception.exceptions.NoteConflictException;
 import com.krabelard.notatex.note.exception.exceptions.NoteIOException;
 import com.krabelard.notatex.note.exception.exceptions.NoteNotFoundException;
 import com.krabelard.notatex.note.repository.NoteRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class NoteCrudService {
 
-    @Autowired
-    private NoteRepository repository;
+    private final NoteRepository repository;
+
     private final NoteMapper mapper = NoteMapper.INSTANCE;
 
     public UUID create(MultipartFile noteFile) {
