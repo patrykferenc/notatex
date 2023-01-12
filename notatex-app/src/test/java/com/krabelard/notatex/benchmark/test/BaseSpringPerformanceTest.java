@@ -1,24 +1,29 @@
 package com.krabelard.notatex.benchmark.test;
 
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import com.krabelard.notatex.NotatexApplication;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.TimeUnit;
 
-@SpringBootTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@ExtendWith({MockitoExtension.class, SpringExtension.class})
 public abstract class BaseSpringPerformanceTest {
+
+    protected ConfigurableApplicationContext context;
+
+    protected void setContext() {
+        context = SpringApplication.run(NotatexApplication.class, "--spring.profiles.active=benchmark");
+        context.registerShutdownHook();
+    }
+
+    protected void closeContext() {
+        context.close();
+    }
 }
