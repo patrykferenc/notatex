@@ -20,10 +20,10 @@ import java.util.Objects;
 public class NoteCrudServicePerformanceTest extends BaseSpringPerformanceTest {
 
     @MockBean
-    private NoteRepository REPOSITORY;
+    private NoteRepository noteRepository;
 
     @InjectMocks
-    private NoteCrudService SERVICE;
+    private NoteCrudService noteCrudService;
 
     @Disabled("Disabled as it fails - TODO")
     @Test
@@ -47,14 +47,14 @@ public class NoteCrudServicePerformanceTest extends BaseSpringPerformanceTest {
     public void createOkBenchmark() {
         for (int i = 0; i < 10; ++i) {
             try (
-                    val inputStream = NoteCrudServicePerformanceTest.class.getClassLoader().getResourceAsStream("sample.tex")
+                    val inputStream = getClass().getClassLoader().getResourceAsStream("notatex/benchmark/" + "simple.tex")
             ) {
                 val bytes = Objects.requireNonNull(inputStream).readAllBytes();
                 val fileName = String.format("sample%d.tex", i);
                 val mockFile = new MockMultipartFile(fileName, bytes);
-                SERVICE.create(mockFile);
+                noteCrudService.create(mockFile);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Could not read file!", e);
             }
         }
     }
