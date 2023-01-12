@@ -24,7 +24,7 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql:42.5.1'
 
     // H2 driver (for testing)
-    implementation 'com.h2database:h2-mvstore:2.1.214'
+    testImplementation 'com.h2database:h2:2.1.214'
 
     // MapStruct
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
