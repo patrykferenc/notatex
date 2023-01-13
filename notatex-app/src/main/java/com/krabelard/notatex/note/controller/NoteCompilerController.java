@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/compile")
+@CrossOrigin("http://notatex-front")
 @RequiredArgsConstructor
 public class NoteCompilerController {
 
