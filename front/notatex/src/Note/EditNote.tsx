@@ -13,8 +13,8 @@ export function EditNote({ onSubmit }: EditNoteProps) {
       <h1 className="my-4">Edit note</h1>
       <NoteForm
         title={note.title}
-        markdown={note.markdown}
-        onSubmit={(data) => onSubmit(note.id, data)}
+        // markdown={note.markdown}
+        onSubmit={(data) => onSubmit(note.uuid, data)}
       />
     </>
   );

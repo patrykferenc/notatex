@@ -10,7 +10,7 @@ type NoteFormProps = {
 export function NoteForm({
   onSubmit,
   title = "",
-  markdown = "",
+  // markdown = "",
 }: NoteFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
@@ -21,10 +21,30 @@ export function NoteForm({
 
     onSubmit({
       title: titleRef.current!.value,
-      markdown: markdownRef.current!.value,
+      // markdown: markdownRef.current!.value,
     });
 
+    onCreatePost();
+
     navigate("..");
+  }
+
+  let onCreatePost=()=>{
+    let postInfo = {
+      title: titleRef.current!.value,
+      markdown: markdownRef.current!.value,
+    }
+    fetch("http://localhost:5050/api/notes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postInfo),
+    })
+      .then((r) => r.json())
+      .then((res) => {
+        console.log(res);
+      });
   }
 
   return (
@@ -50,7 +70,7 @@ export function NoteForm({
             required
             as="textarea"
             ref={markdownRef}
-            defaultValue={markdown}
+            // defaultValue={markdown}
             rows={15}
             data-e2e="body field"
           />
