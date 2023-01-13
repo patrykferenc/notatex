@@ -1,5 +1,5 @@
 ARG TARGET_PLATFORM
-FROM --platform=${TARGET_PLATFORM} node:alpine
+FROM node:alpine
 WORKDIR /usr/app
 COPY . .
 RUN npm install
