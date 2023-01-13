@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.0.0'
+    id 'org.springframework.boot' version '3.0.1'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'io.freefair.lombok' version '6.1.0'
 }
@@ -15,6 +15,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.hateoas:spring-hateoas:2.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // SpringDoc
@@ -22,6 +23,9 @@ dependencies {
 
     // Postgres driver
     runtimeOnly 'org.postgresql:postgresql:42.5.1'
+
+    // H2 driver (for testing)
+    testImplementation 'com.h2database:h2:2.1.214'
 
     // MapStruct
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
@@ -46,12 +50,66 @@ dependencies {
     implementation 'org.seleniumhq.selenium:selenium-java:4.6.0'
     implementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.6.0'
     testImplementation 'io.github.bonigarcia:webdrivermanager:5.3.1'
+
+    // JMH
+    testImplementation 'org.openjdk.jmh:jmh-core:1.35'
+    testAnnotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.35'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+task acceptanceTest(type: Test) {
+    group = 'verification'
+    description = 'Runs e2e tests with cucumber.'
 }
 
-test {
+task performanceTest(type: Test) {
+    group = 'verification'
+    description = 'Runs performance tests with JMH.'
+}
+
+// Dev tests (Unit and integration)
+tasks.named("test") {
     useJUnitPlatform()
+
+    filter {
+        includeTestsMatching '*UnitTest'
+        includeTestsMatching '*IntegrationTest'
+
+        excludeTestsMatching '*AcceptanceTest'
+        excludeTestsMatching '*PerformanceTest'
+    }
+}
+
+// Acceptance
+tasks.named('acceptanceTest') {
+    useJUnitPlatform()
+
+    filter {
+        includeTestsMatching '*AcceptanceTest'
+
+        excludeTestsMatching '*UnitTest'
+        excludeTestsMatching '*IntegrationTest'
+    }
+}
+
+tasks.named('performanceTest') {
+    useJUnitPlatform()
+
+    filter {
+        includeTestsMatching '*PerformanceTest'
+
+        excludeTestsMatching '*UnitTest'
+        excludeTestsMatching '*IntegrationTest'
+    }
+}
+
+tasks.named('performanceTest') {
+    useJUnitPlatform()
+
+    filter {
+        includeTestsMatching '*PerformanceTest'
+
+        excludeTestsMatching '*UnitTest'
+        excludeTestsMatching '*IntegrationTest'
+        excludeTestsMatching '*AcceptanceTest'
+    }
 }

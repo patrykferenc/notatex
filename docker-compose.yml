@@ -24,7 +24,7 @@ services:
     build:
       context: ./latex-compilation-service
       dockerfile: Dockerfile
-      args: 
+      args:
         - RUST_IMG=${RUST_IMG}
     ports:
       - "8000:8000"

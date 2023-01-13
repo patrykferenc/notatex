@@ -1,8 +1,8 @@
 package com.krabelard.notatex.note.controller;
 
 import com.krabelard.notatex.note.service.ExternalLatexCompilerApiService;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +14,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/compile")
+@RequiredArgsConstructor
 public class NoteCompilerController {
 
-    @Autowired
-    private ExternalLatexCompilerApiService compiler;
+    private final ExternalLatexCompilerApiService compiler;
 
     @GetMapping(value = "/{noteUuid}")
     public ResponseEntity<byte[]> compileNote(@PathVariable UUID noteUuid) {
