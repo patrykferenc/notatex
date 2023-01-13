@@ -22,6 +22,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
  */
 @RestController
 @RequestMapping("/api/notes")
+@CrossOrigin("http://notatex-front")
 public class NoteCrudController {
 
     @Autowired
