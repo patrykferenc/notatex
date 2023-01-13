@@ -36,6 +36,13 @@ public class NoteExceptionHandler {
         return ex(e.getMessage());
     }
 
+    private ApiExceptionDTO ex(String message) {
+        return ApiExceptionDTO.builder()
+                .message(message)
+                .timestamp(ZonedDateTime.now())
+                .build();
+    }
+
     @Data
     @Builder
     private static class ApiExceptionDTO {
@@ -43,13 +50,6 @@ public class NoteExceptionHandler {
         private final String message;
         private final ZonedDateTime timestamp;
 
-    }
-
-    private ApiExceptionDTO ex(String message) {
-        return ApiExceptionDTO.builder()
-                .message(message)
-                .timestamp(ZonedDateTime.now())
-                .build();
     }
 
 }
