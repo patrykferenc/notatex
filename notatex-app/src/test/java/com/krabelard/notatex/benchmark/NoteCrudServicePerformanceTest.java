@@ -2,26 +2,37 @@ package com.krabelard.notatex.benchmark;
 
 import com.krabelard.notatex.benchmark.test.BaseSpringPerformanceTest;
 import com.krabelard.notatex.note.service.NoteCrudService;
+import lombok.SneakyThrows;
 import lombok.val;
-import org.junit.jupiter.api.Disabled;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.io.IOException;
 import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class NoteCrudServicePerformanceTest extends BaseSpringPerformanceTest {
 
     private NoteCrudService noteCrudService;
 
-    private final ThreadLocalRandom random = ThreadLocalRandom.current();
+    private MockMultipartFile noteFile;
+
+    @SneakyThrows
+    @Setup(Level.Invocation)
+    public void setupNoteFile() {
+        final var inputStream = getClass().getClassLoader().getResourceAsStream("notatex/benchmark/" + "simple.tex");
+        final var fileName = RandomStringUtils.randomAlphanumeric(26) + ".tex";
+        final var content = Objects.requireNonNull(inputStream).readAllBytes();
+        noteFile = new MockMultipartFile(fileName, fileName, MediaType.TEXT_PLAIN_VALUE, content);
+    }
 
     @Setup
     public void setup() {
@@ -35,15 +46,13 @@ public class NoteCrudServicePerformanceTest extends BaseSpringPerformanceTest {
         closeContext();
     }
 
-    // This fails on a clean db?
-    @Disabled("Method fails")
     @Test
     void runBenchmarks() throws RunnerException {
         val runner = new Runner(new OptionsBuilder()
                 .include(String.format("\\.%s\\.", NoteCrudServicePerformanceTest.class.getSimpleName()))
-                .warmupIterations(0) // temp
-                .measurementIterations(1) // temporary - we need to clean DB
-                .forks(0)
+                .warmupIterations(2)
+                .measurementIterations(8)
+                .forks(1)
                 .threads(1)
                 .shouldDoGC(true)
                 .shouldFailOnError(true)
@@ -55,16 +64,7 @@ public class NoteCrudServicePerformanceTest extends BaseSpringPerformanceTest {
     }
 
     @Benchmark
-    public void createOkBenchmark() {
-        try (
-                val inputStream = getClass().getClassLoader().getResourceAsStream("notatex/benchmark/" + "simple.tex")
-        ) {
-            val bytes = Objects.requireNonNull(inputStream).readAllBytes();
-            val fileName = "this_can_not_exist" + random.nextInt(4, 10) + ".tex";
-            final var othermock = new MockMultipartFile(fileName, fileName, "text/plain", bytes);
-            noteCrudService.create(othermock);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not read file!", e);
-        }
+    public void createOkBenchmark(Blackhole blackhole) {
+            blackhole.consume(noteCrudService.create(noteFile));
     }
 }
